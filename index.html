@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOÀNG VĂN CƯỜNG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        /* =========================
+   CLICK EFFECT (RING + SPARK)
+========================= */
+.click-ring{
+  position: fixed;
+  left: 0; top: 0;
+  width: 12px; height: 12px;
+  border-radius: 999px;
+  transform: translate(-50%,-50%) scale(0);
+  pointer-events: none;
+  z-index: 999999; /* luôn nổi */
+  border: 2px solid rgba(51, 173, 88, 0.9);
+  box-shadow: 0 0 18px rgba(53, 179, 53, 0.35);
+  animation: clickRing .45s ease-out forwards;
+}
+
+@keyframes clickRing{
+  0%   { opacity: 1; transform: translate(-50%,-50%) scale(0); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scale(10); }
+}
+
+.click-spark{
+  position: fixed;
+  left: 0; top: 0;
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  z-index: 999999;
+  background: #ffffff;
+  box-shadow: 0 0 12px rgba(72, 124, 72, 0.5);
+  animation: clickSpark .6s ease-out forwards;
+}
+
+@keyframes clickSpark{
+  0%   { opacity: 1; transform: translate(-50%,-50%) translate(0,0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%,-50%) translate(var(--dx), var(--dy)) scale(.2); }
+}
+
+        /* CẤU HÌNH GIAO DIỆN CHUNG */
+        :root {
+            --primary-color: #30aa24; /* Màu chủ đạo */
+            --bg-color: #48ad83;
+            --card-bg: #0ef1d3;
+            --text-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* THIẾT KẾ THẺ CARD */
+        .profile-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* ẢNH BÌA & AVATAR */
+        .card-header {
+            height: 120px;
+            background: linear-gradient(135deg, #a8b90f, #9013fe);
+        }
+
+        .avatar-container {
+            width: 120px;
+            height: 120px;
+            margin: -60px auto 10px;
+            border-radius: 50%;
+            border: 5px solid var(--card-bg);
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* THÔNG TIN CHÍNH */
+        .info-section {
+            padding: 0 20px 20px;
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        .verified-badge{
+        margin-left: -3px;
+        font-size: 20px;
+        color: #1d9bf0;
+        vertical-align: middle;
+        position: relative;
+        top: -2px;   
+        vertical-align: middle;
+        filter: drop-shadow(0 2px 6px rgba(29,155,240,.25));
+        }
+
+        .job-title {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* DANH SÁCH LIÊN HỆ */
+        .contact-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .contact-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            color: #555;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-list li i {
+            width: 30px;
+            color: var(--primary-color);
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .contact-list li a {
+            text-decoration: none;
+            color: #555;
+            transition: color 0.2s;
+        }
+
+        .contact-list li a:hover {
+            color: var(--primary-color);
+        }
+
+        /* NÚT MẠNG XÃ HỘI */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #555;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        /* PHẦN QR CODE */
+        .qr-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .qr-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+        }
+        
+        #qrcode img {
+            border: 5px solid #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+        <div class="card-header"></div>
+
+        <div class="avatar-container">
+    <img id="fb-avatar" src="" alt="Avatar">
+</div>
+
+<script>
+    
+    const facebookID = "100007922737857"; // 
+    function updateAvatar() {
+        const timestamp = new Date().getTime();
+        const avatarUrl = `https://graph.facebook.com/${facebookID}/picture?width=500&height=500&access_token=6628568379|c1e620fa708a1d5696fb991c1bde5662&t=${timestamp}`;
+        document.getElementById('fb-avatar').src = avatarUrl;
+    }
+
+    // Chạy hàm cập nhật
+    updateAvatar();
+</script>
+
+        <div class="info-section">
+            <h1 class="name">
+  HOÀNG VĂN CƯỜNG
+  <i class="fa-solid fa-circle-check verified-badge" title="Đã xác minh" aria-hidden="true"></i>
+</h1>
+
+
+            <p class="job-title">DEV LỎ ĐANG LÀM SINH VIÊN Y</p>
+
+            <ul class="contact-list">
+                <li>
+                    <i class="fas fa-phone-alt"></i>
+                    <a href="tel:0901234567">0865772851</a>
+                </li>
+                <li>
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:cyanxray2001@gmail.com">cyanxray2001@gmail.com</a>
+                </li>
+                <li>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Bắc Ninh, Việt Nam</span>
+                </li>
+                <li>
+                    <i class="fas fa-globe"></i>
+                    <a href="https://www.youtube.com/@VanCuongModer" target="_blank">Kênh YTB </a>
+                </li>
+            </ul>
+
+            <div class="social-buttons">
+    <a href="https://www.facebook.com/CyanLoveDua.Info" target="_blank" class="social-btn facebook" title="Facebook">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+
+    <a href="https://github.com/vancuong01" target="_blank" class="social-btn github" title="GitHub">
+        <i class="fab fa-github"></i>
+    </a>
+    <a href="https://m.me/100007922737857" target="_blank" class="social-btn messenger" title="messenger">
+        <i class="fa-brands fa-facebook-messenger"></i>
+    </a>
+</div>
+
+        <div class="qr-section">
+            <p class="qr-title">Quét mã để lưu thông tin</p>
+            <div id="qrcode"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- CẤU HÌNH DỮ LIỆU CỦA BẠN TẠI ĐÂY ---
+        
+        // Cách 1: QR dẫn đến link website (Ví dụ: Facebook cá nhân, Zalo, hoặc chính web này)
+        const myLink = "https://www.facebook.com/CyanLoveDua.Info/"; 
+
+        const qrContainer = document.getElementById("qrcode");
+        
+        // Nếu dùng Cách 1 thì để biến myLink, dùng Cách 2 thì đổi thành vCardData
+        new QRCode(qrContainer, {
+            text: myLink, 
+            width: 128,
+            height: 128,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    </script>
+
+
+    <div id="music-control" onclick="toggleMusic()">
+    <i class="fas fa-music"></i>
+</div>
+
+<div id="youtube-audio" style="display:none;"></div>
+
+<style>
+    #music-control {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s;
+        border: 2px solid #ddd;
+    }
+
+    /* Hiệu ứng khi nhạc đang chạy: Xoay tròn và đổi màu */
+    #music-control.playing {
+        animation: spin 3s linear infinite;
+        background: var(--primary-color, #4a90e2); /* Lấy màu chủ đạo */
+        border-color: transparent;
+    }
+    
+    #music-control.playing i {
+        color: #fff;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+
+<script>
+  
+    // ==========================================
+    const youtubeVideoID = "Hpjd3dNXQy0"; // <--- Thay ID bài hát của bạn vào đây
+    // ==========================================
+
+    var player;
+    var isPlaying = false;
+
+    // 1. Tải thư viện YouTube IFrame API
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // 2. Cài đặt Player khi thư viện tải xong
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-audio', {
+            height: '0', // Ẩn video đi
+            width: '0',
+            videoId: youtubeVideoID,
+            playerVars: {
+                'autoplay': 0, 
+                'controls': 0,
+                'loop': 1,      // Lặp lại bài hát
+                'playlist': youtubeVideoID // Cần thiết để loop hoạt động
+            },
+            events: {
+                'onReady': onPlayerReady
+            }
+        });
+    }
+
+    // 3. Xử lý khi Player sẵn sàng
+    function onPlayerReady(event) {
+        // Cố gắng phát nhạc (thường sẽ bị chặn nếu chưa tương tác)
+        tryPlayMusic();
+
+        // Thêm sự kiện: Chạm vào màn hình lần đầu sẽ bật nhạc
+        document.body.addEventListener('click', function() {
+            if (!isPlaying) {
+                tryPlayMusic();
+            }
+        }, { once: true });
+        
+        document.body.addEventListener('touchstart', function() {
+            if (!isPlaying) {
+                tryPlayMusic();
+            }
+        }, { once: true });
+    }
+
+    // Hàm phát nhạc
+    function tryPlayMusic() {
+        if(player && player.playVideo) {
+            player.playVideo();
+            isPlaying = true;
+            updateButtonUI();
+        }
+    }
+
+    // Hàm Tắt/Bật khi bấm vào nút
+    function toggleMusic() {
+        if (!player) return;
+        
+        if (isPlaying) {
+            player.pauseVideo();
+            isPlaying = false;
+        } else {
+            player.playVideo();
+            isPlaying = true;
+        }
+        updateButtonUI();
+    }
+
+    // Cập nhật giao diện nút (Xoay/Dừng)
+    function updateButtonUI() {
+        const btn = document.getElementById("music-control");
+        if (isPlaying) {
+            btn.classList.add("playing");
+        } else {
+            btn.classList.remove("playing");
+        }
+    }
+</script>
+
+<script>
+(function(){
+  const finePointer = window.matchMedia('(pointer:fine)').matches;
+  if(!finePointer) return;
+
+  const sparkleStyle = document.createElement('style');
+  sparkleStyle.textContent = `
+    .sparkle{
+      position: fixed;
+      width: 6px; height: 6px;
+      border-radius: 999px;
+      background: rgba(144,19,254,.7);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%) scale(0);
+      animation: spk .6s ease-out forwards;
+      box-shadow: 0 0 12px rgba(74,144,226,.45);
+    }
+    @keyframes spk{
+      0%{ opacity:0; transform: translate(-50%,-50%) scale(0); }
+      30%{ opacity:1; transform: translate(-50%,-50%) scale(1); }
+      100%{ opacity:0; transform: translate(-50%,-70%) scale(.2); }
+    }
+  `;
+  document.head.appendChild(sparkleStyle);
+
+  let last = 0;
+  window.addEventListener('pointermove', (e)=>{
+    const now = performance.now();
+    if(now - last < 40) return; // giới hạn để nhẹ máy
+    last = now;
+
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = e.clientX + 'px';
+    s.style.top = e.clientY + 'px';
+    document.body.appendChild(s);
+    setTimeout(()=> s.remove(), 650);
+  }, {passive:true});
+})();
+</script>
+
+<script>
+    
+/* ======================================
+   CLICK EFFECT: hiện tại đúng điểm click
+====================================== */
+(function(){
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+
+  function burst(x, y){
+    // vòng sáng
+    const ring = document.createElement('div');
+    ring.className = 'click-ring';
+    ring.style.left = x + 'px';
+    ring.style.top  = y + 'px';
+    document.body.appendChild(ring);
+    ring.addEventListener('animationend', ()=> ring.remove());
+
+    // tia lấp lánh
+    const n = 10; // số tia mỗi click
+    for(let i=0;i<n;i++){
+      const s = document.createElement('div');
+      s.className = 'click-spark';
+      s.style.left = x + 'px';
+      s.style.top  = y + 'px';
+
+      const angle = rand(0, Math.PI*2);
+      const dist  = rand(18, 75);
+      s.style.setProperty('--dx', (Math.cos(angle)*dist) + 'px');
+      s.style.setProperty('--dy', (Math.sin(angle)*dist) + 'px');
+
+      // đổi màu nhẹ
+      const colors = ['#ffffff', '#4a90e2', '#9013fe', '#d9e7ff'];
+      s.style.background = colors[(Math.random()*colors.length)|0];
+
+      document.body.appendChild(s);
+      s.addEventListener('animationend', ()=> s.remove());
+    }
+  }
+
+  // bắt click/tap ở mọi nơi
+  document.addEventListener('pointerdown', (e)=>{
+    burst(e.clientX, e.clientY);
+  }, { passive:true });
+})();
+</script>
+<script>
+(function(){
+  const expectedName = "HOÀNG VĂN CƯỜNG"; // <-- đại nhân đổi tên cần “được tích xanh” tại đây
+
+  const nameEl = document.getElementById("owner-name");
+  const badge = document.getElementById("verify-badge");
+  if(!nameEl || !badge) return;
+
+  const current = (nameEl.childNodes[0]?.textContent || nameEl.textContent || "").trim();
+
+  // So khớp "tương đối": bỏ icon text, lấy text tổng rồi trim
+  const text = nameEl.textContent.replace(/\s+/g,' ').trim();
+
+  if(text.includes(expectedName)){
+    badge.style.display = "inline-block";
+  }else{
+    badge.style.display = "none";
+  }
+})();
+</script>
+
+</body>
+</html>
