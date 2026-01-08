@@ -382,9 +382,11 @@
       Để bình luận Facebook, hãy bấm <b>⋯</b> → <b>Mở bằng trình duyệt</b> (Chrome/Safari).
     </div>
     <div class="iw-actions">
-      <a class="iw-open" href="https://vancuong01.github.io/infovancuong/" target="_blank" rel="noopener">Mở bằng trình duyệt</a>
-      <button id="iw-close" type="button" class="iw-close">Đóng</button>
-    </div>
+  <button id="iw-open" type="button">Mở bằng trình duyệt</button>
+  <button id="iw-copy" type="button" class="ghost">Copy link</button>
+</div>
+<p id="iw-msg" style="margin:8px 0 0;font-size:12px;color:#666;"></p>
+
   </div>
 </div>
 
@@ -839,19 +841,71 @@
 </script>
 <script>
 (function(){
-  const ua = navigator.userAgent || "";
-  // Nhận diện phổ biến các in-app browser (không chỉ Zalo)
-  const isInApp =
-    /Zalo|FBAN|FBAV|Instagram|Line|Twitter|TikTok|Snapchat|Messenger/i.test(ua);
+  const openBtn = document.getElementById("iw-open");
+  const copyBtn = document.getElementById("iw-copy");
+  const msgEl  = document.getElementById("iw-msg");
+  if(!openBtn || !copyBtn) return;
 
-  const box = document.getElementById("inapp-warning");
-  const closeBtn = document.getElementById("iw-close");
-  if(!box || !closeBtn) return;
+  function setMsg(t){ if(msgEl) msgEl.textContent = t || ""; }
 
-  if(isInApp) box.style.display = "flex";
-  closeBtn.onclick = () => box.style.display = "none";
+  function tryOpenExternalBrowser(url){
+    const ua = navigator.userAgent || "";
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+    // 1) Luôn thử mở tab mới trước (nhiều in-app browser sẽ hiện tùy chọn “Open in Safari”)
+    const w = window.open(url, "_blank", "noopener,noreferrer");
+    if(w) { setMsg("Nếu chưa mở được, hãy bấm ⋯ trong app và chọn “Mở bằng Safari/Chrome”."); return; }
+
+    // 2) Android: thử intent mở Chrome (chỉ hoạt động ở một số app/webview)
+    if(isAndroid){
+      const intent = "intent://" + location.host + location.pathname + location.search +
+        "#Intent;scheme=https;package=com.android.chrome;end";
+      location.href = intent;
+      setMsg("Nếu không bật Chrome: bấm ⋯ → Mở bằng trình duyệt.");
+      return;
+    }
+
+    // 3) iOS: thử googlechrome:// (nhiều app CHẶN, nhưng thử vẫn tốt)
+    if(isIOS){
+      const chromeUrl = "googlechrome://navigate?url=" + encodeURIComponent(url);
+      location.href = chromeUrl;
+      setMsg("Nếu không bật Chrome: bấm ⋯ → Mở bằng Safari (khuyến nghị trên iPhone).");
+      return;
+    }
+
+    // 4) Fallback: điều hướng bình thường
+    location.href = url;
+    setMsg("Nếu vẫn không được: dùng nút Copy link và mở bằng trình duyệt.");
+  }
+
+  async function copyLink(){
+    const url = location.href;
+    try{
+      await navigator.clipboard.writeText(url);
+      setMsg("✅ Đã copy link. Dán vào Safari/Chrome để bình luận.");
+    }catch(e){
+      // fallback cũ cho iOS cũ / webview chặn clipboard
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      setMsg("✅ Đã copy link. Dán vào Safari/Chrome để bình luận.");
+    }
+  }
+
+  openBtn.addEventListener("click", function(){
+    tryOpenExternalBrowser(location.href);
+  });
+
+  copyBtn.addEventListener("click", function(){
+    copyLink();
+  });
 })();
 </script>
+
 
 </body>
 </html>
