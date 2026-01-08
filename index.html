@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <meta property="fb:app_id" content="1971446477061191" />
+    
+        <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v24.0&appId=1971446477061191"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOÀNG VĂN CƯỜNG</title>
@@ -220,10 +224,134 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
+        /* =========================
+   COMMENT BOX
+========================= */
+.comment-section{
+  background:#fff;
+  margin: 12px 0 0;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #eee;
+}
+
+.comment-title{
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.comment-form{
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.comment-form input,
+.comment-form textarea{
+  width: 100%;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+  font-size: 14px;
+}
+
+.comment-form textarea{
+  min-height: 90px;
+  resize: vertical;
+}
+
+.comment-btn{
+  border: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+}
+
+.comment-btn:active{ transform: scale(0.98); }
+
+.comment-hint{
+  font-size: 12px;
+  color: #c62828;
+  margin-top: 2px;
+  min-height: 16px;
+}
+
+.comment-list{
+  display: grid;
+  gap: 10px;
+}
+
+.comment-item{
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fafafa;
+}
+
+.comment-meta{
+  display:flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.comment-name{
+  font-weight: 700;
+  color: #444;
+}
+
+.comment-text{
+  font-size: 14px;
+  color: #333;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.comment-section{
+  background:#fff;
+  margin: 12px 20px 20px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #eee;
+  text-align: left;
+}
+
+.comment-title{
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+
 
     </style>
+    <meta property="fb:app_id" content="1971446477061191" />
+<meta property="og:url" content="https://vancuong01.github.io/infovancuong/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="HOÀNG VĂN CƯỜNG" />
+<meta property="og:description" content="Thông tin liên hệ" />
+<meta property="og:image" content="https://vancuong01.github.io/infovancuong/og-image.jpg" />
+
 </head>
 <body>
+
+    
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+  src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0&appId=1971446477061191">
+</script>
 
     <div class="profile-card">
         <div class="card-header"></div>
@@ -257,7 +385,7 @@
             <ul class="contact-list">
                 <li>
                     <i class="fas fa-phone-alt"></i>
-                    <a href="tel:0865772851">0865772851</a>
+                    <a href="tel:0901234567">0865772851</a>
                 </li>
                 <li>
                     <i class="fas fa-envelope"></i>
@@ -291,6 +419,16 @@
             <div id="qrcode"></div>
         </div>
     </div>
+
+            <div class="comment-section">
+  <p class="comment-title">Bình luận</p>
+
+  <div class="fb-comments"
+    data-href="https://vancuong01.github.io/infovancuong/"
+    data-width="100%"
+    data-numposts="5">
+  </div>
+</div>
 
     <script>
         // --- CẤU HÌNH DỮ LIỆU CỦA BẠN TẠI ĐÂY ---
@@ -542,6 +680,120 @@
   }else{
     badge.style.display = "none";
   }
+})();
+</script>
+<script>
+/* =========================
+   COMMENTS (1 lần / 1 trình duyệt)
+========================= */
+(function(){
+  const KEY_LIST = "hvc_comments_v1";
+  const KEY_ONCE = "hvc_commented_once_v1";
+
+  const form = document.getElementById("comment-form");
+  const nameEl = document.getElementById("c-name");
+  const textEl = document.getElementById("c-text");
+  const listEl = document.getElementById("comment-list");
+  const hintEl = document.getElementById("comment-hint");
+
+  if(!form || !nameEl || !textEl || !listEl || !hintEl) return;
+
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function formatTime(ts){
+    const d = new Date(ts);
+    const dd = String(d.getDate()).padStart(2,"0");
+    const mm = String(d.getMonth()+1).padStart(2,"0");
+    const yy = d.getFullYear();
+    const hh = String(d.getHours()).padStart(2,"0");
+    const mi = String(d.getMinutes()).padStart(2,"0");
+    return `${dd}/${mm}/${yy} ${hh}:${mi}`;
+  }
+
+  function loadComments(){
+    try{
+      return JSON.parse(localStorage.getItem(KEY_LIST) || "[]");
+    }catch{
+      return [];
+    }
+  }
+
+  function saveComments(arr){
+    localStorage.setItem(KEY_LIST, JSON.stringify(arr));
+  }
+
+  function render(){
+    const comments = loadComments();
+    if(comments.length === 0){
+      listEl.innerHTML = `<div style="font-size:13px;color:#777;">Chưa có bình luận nào.</div>`;
+      return;
+    }
+
+    listEl.innerHTML = comments
+      .slice().reverse()
+      .map(c => `
+        <div class="comment-item">
+          <div class="comment-meta">
+            <span class="comment-name">${escapeHtml(c.name)}</span>
+            <span>${escapeHtml(formatTime(c.ts))}</span>
+          </div>
+          <div class="comment-text">${escapeHtml(c.text)}</div>
+        </div>
+      `).join("");
+  }
+
+  function lockIfAlreadyCommented(){
+    const once = localStorage.getItem(KEY_ONCE) === "1";
+    if(once){
+      form.classList.add("disabled");
+      hintEl.style.color = "#2e7d32";
+      hintEl.textContent = "Bạn đã gửi 1 bình luận trên thiết bị này.";
+    }
+  }
+
+  render();
+  lockIfAlreadyCommented();
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    hintEl.textContent = "";
+
+    if(localStorage.getItem(KEY_ONCE) === "1"){
+      hintEl.style.color = "#2e7d32";
+      hintEl.textContent = "Bạn đã gửi 1 bình luận rồi.";
+      return;
+    }
+
+    const name = nameEl.value.trim();
+    const text = textEl.value.trim();
+
+    if(name.length < 2){
+      hintEl.style.color = "#c62828";
+      hintEl.textContent = "Tên tối thiểu 2 ký tự.";
+      return;
+    }
+    if(text.length < 2){
+      hintEl.style.color = "#c62828";
+      hintEl.textContent = "Bình luận tối thiểu 2 ký tự.";
+      return;
+    }
+
+    const comments = loadComments();
+    comments.push({ name, text, ts: Date.now() });
+    saveComments(comments);
+
+    localStorage.setItem(KEY_ONCE, "1");
+    form.reset();
+    render();
+    lockIfAlreadyCommented();
+  });
 })();
 </script>
 
