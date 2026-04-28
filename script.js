@@ -8,9 +8,16 @@ function updateAvatar() {
 }
 updateAvatar();
 
-// Đã loại bỏ logic tạo QR Code ở đây
+// 2. TỰ ĐỘNG CHÈN LINK CHO BÌNH LUẬN FACEBOOK
+(function(){
+    const currentUrl = window.location.href.split('?')[0].split('#')[0];
+    const fbDiv = document.getElementById('dynamic-fb-comments');
+    if(fbDiv) {
+        fbDiv.innerHTML = `<div class="fb-comments" data-href="${currentUrl}" data-width="100%" data-numposts="5"></div>`;
+    }
+})();
 
-// 2. XÁC MINH TÍCH XANH
+// 3. XÁC MINH TÍCH XANH
 (function(){
     const nameEl = document.getElementById("owner-name");
     const badge = document.getElementById("verify-badge");
@@ -19,7 +26,7 @@ updateAvatar();
     }
 })();
 
-// 3. TRÌNH PHÁT NHẠC
+// 4. TRÌNH PHÁT NHẠC
 const youtubeVideoID = "Hpjd3dNXQy0"; 
 var player, isPlaying = false;
 var tag = document.createElement('script');
@@ -43,7 +50,7 @@ function toggleMusic() {
     else { player.playVideo(); isPlaying = true; btn.classList.add("playing"); }
 }
 
-// 4. HIỆU ỨNG CLICK
+// 5. HIỆU ỨNG CLICK
 document.addEventListener('pointerdown', (e) => {
     const ring = document.createElement('div');
     ring.className = 'click-ring';
@@ -52,7 +59,7 @@ document.addEventListener('pointerdown', (e) => {
     setTimeout(() => ring.remove(), 400);
 });
 
-// 5. XỬ LÝ IN-APP BROWSER
+// 6. XỬ LÝ IN-APP BROWSER
 (function(){
     const warning = document.getElementById("inapp-warning");
     const ua = navigator.userAgent || "";
@@ -65,4 +72,10 @@ document.addEventListener('pointerdown', (e) => {
     document.getElementById("iw-open")?.addEventListener("click", () => {
         window.open(location.href, "_blank");
     });
+    // ÉP FACEBOOK HIỂN THỊ COMMENT NẾU BỊ LAG
+setTimeout(() => {
+    if (typeof FB !== 'undefined') {
+        FB.XFBML.parse();
+    }
+}, 1500);
 })();
