@@ -9,88 +9,75 @@
 
 body {
     background-color: var(--bg-color);
-    display: flex; justify-content: center; align-items: center;
-    min-height: 100vh; padding: 20px; flex-direction: column;
+    display: flex; justify-content: center; align-items: center; 
+    min-height: 100vh; padding: 20px;
 }
 
 .profile-card {
-    background: var(--card-bg); width: 100%; max-width: 400px;
-    border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    overflow: hidden; text-align: center; margin-bottom: 20px;
-}
-
-.card-header { 
-    height: 120px; 
-    background: linear-gradient(135deg, #a8b90f, #9013fe); /* Nền dự phòng nếu mất ảnh */
-    background-image: url('cover.jpg'); 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: var(--card-bg); 
+    width: 100%; 
+    max-width: 420px; 
+    border-radius: 24px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    text-align: center; 
+    padding: 35px 20px 25px 20px;
 }
 
 .avatar-container {
-    width: 120px; height: 120px; margin: -60px auto 10px;
-    border-radius: 50%; border: 5px solid var(--card-bg);
-    overflow: hidden; background: #fff;
-    position: relative; /* Thêm để avatar nổi lên */
-    z-index: 2;
+    width: 110px; height: 110px; 
+    margin: 0 auto 15px auto; 
+    border-radius: 50%; 
+    border: 4px solid #fff; 
+    overflow: hidden; 
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
 
-.info-section { padding: 0 20px 20px; }
-.name { font-size: 24px; font-weight: bold; color: var(--text-color); }
-.verified-badge { font-size: 20px; color: #1d9bf0; display: none; margin-left: 5px; }
+.info-section { width: 100%; }
+.name { font-size: 22px; font-weight: bold; color: var(--text-color); margin-bottom: 5px; }
+.verified-badge { font-size: 18px; color: #1d9bf0; display: none; margin-left: 5px; }
 
-.job-title { color: #555; font-size: 14px; margin-bottom: 20px; font-weight: 600; }
+.job-title { color: #555; font-size: 13px; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; }
 
 .contact-list {
     list-style: none; text-align: left; margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.4); padding: 15px; border-radius: 12px;
+    background: rgba(255, 255, 255, 0.4); padding: 12px; border-radius: 12px;
 }
-.contact-list li { padding: 8px 0; border-bottom: 1px dashed #ccc; display: flex; align-items: center; }
+.contact-list li { padding: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); display: flex; align-items: center; }
 .contact-list li:last-child { border-bottom: none; }
-.contact-list li i { width: 25px; color: var(--primary-color); margin-right: 10px; }
-.contact-list li a { text-decoration: none; color: #333; font-weight: 500; }
+.contact-list li i { width: 25px; color: var(--primary-color); margin-right: 8px; font-size: 15px;}
+.contact-list li a { text-decoration: none; color: #333; font-weight: 500; font-size: 13.5px;}
 
-.social-buttons { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; }
+.social-buttons { display: flex; justify-content: center; gap: 12px; }
 .social-btn {
-    width: 40px; height: 40px; border-radius: 50%; background: #fff;
+    width: 42px; height: 42px; border-radius: 50%; background: #fff;
     display: flex; align-items: center; justify-content: center;
-    color: #555; transition: 0.3s; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    color: #555; transition: 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-.social-btn:hover { background: var(--primary-color); color: #fff; transform: translateY(-2px); }
+.social-btn:hover { background: var(--primary-color); color: #fff; transform: translateY(-3px); }
 .social-btn.zalo:hover { background: #0068ff; }
 
-/* FIX LỖI LỆCH QR Ở ĐÂY */
-.qr-section { background: #f9f9f9; padding: 20px; border-top: 1px dashed #ddd; }
-.qr-title { font-size: 11px; color: #888; margin-bottom: 10px; font-weight: bold; text-align: center; }
-#qrcode { display: flex; justify-content: center; align-items: center; width: 100%; }
-#qrcode img { border-radius: 8px; border: 4px solid #fff; }
-
-.comment-section-wrapper { width: 100%; max-width: 400px; }
-.comment-section {
-    background: #fff; padding: 20px; border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-.comment-title { font-size: 13px; color: #555; margin-bottom: 15px; font-weight: bold; text-align: center; }
-
-/* MISC & EFFECTS */
+/* TRÌNH PHÁT NHẠC */
 #music-control {
-    position: fixed; bottom: 20px; right: 20px;
+    position: fixed; bottom: 15px; right: 15px;
     width: 45px; height: 45px; background: #fff; border-radius: 50%;
     display: flex; justify-content: center; align-items: center; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000;
 }
 #music-control.playing { animation: spin 3s linear infinite; background: var(--primary-color); color: #fff; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-#inapp-warning {
-    position: fixed; inset: 0; background: rgba(0,0,0,.7);
-    z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding: 15px;
+/* =========================
+   RESPONSIVE XOAY NGANG
+========================= */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    body { padding: 10px; align-items: flex-start; }
+    .profile-card { padding: 20px; display: flex; align-items: center; max-width: 600px; text-align: left; }
+    .avatar-container { margin: 0 20px 0 0; width: 90px; height: 90px; flex-shrink: 0; }
+    .job-title { margin-bottom: 10px; }
+    .contact-list { margin-bottom: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+    .contact-list li { border-bottom: none; }
+    .social-buttons { justify-content: flex-start; }
+    #music-control { bottom: 10px; right: 10px; width: 40px; height: 40px; }
 }
-.iw-box { background: #fff; width: 100%; max-width: 450px; border-radius: 15px; padding: 20px; }
-.iw-open { background: #4a90e2; color: #fff; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
-.iw-close { background: #eee; color: #333; border: none; padding: 10px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: bold; }
-.iw-actions { display: flex; gap: 10px; margin-top: 15px; }
-
-.click-ring { position: fixed; pointer-events: none; border: 2px solid var(--primary-color); border-radius: 50%; animation: clickRing .4s ease-out forwards; }
-@keyframes clickRing { 0% { transform: translate(-50%,-50%) scale(0); opacity: 1; } 100% { transform: translate(-50%,-50%) scale(8); opacity: 0; } }
